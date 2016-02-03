@@ -1,0 +1,77 @@
+<div class="bottom">
+				<div class="row row-2"  data-toggle="modal" data-target="#{{ id }}" onclick="">
+					<h3>{{ Name }}</h3>
+					<div class="col-sm-4">
+							<img src="{{ url }}" class="img-more" alt="Cinque Terre">
+					</div>
+					<div class="col-sm-4">
+							{{ nlikes}} likes<br>{{ ndislikes}} dislikes
+					</div>
+					<div class="col-sm-4">
+							User: {{ user }}
+					</div>
+				</div>
+				         <!-- Modal -->
+						<div id="{{ id }}" class="modal fade" role="dialog">
+						  <div class="modal-dialog modal-xlg">
+
+						    <!-- Modal content-->
+						    <div class="modal-content ">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal">&times;</button>
+						        <h4 class="modal-title">{{ Name }}</h4>
+						      </div>
+						      <div class="modal-body row ">
+						   
+						      		<div class="first-column">
+							        	<p><img src="{{ url }}" class="img-rounded" width="600" alt="Cinque Terre"></p>
+							        </div>
+							        <div class="second-column">
+							        	<form method="POST" action="/comment">
+							        	<p><label text-align:"left">Name:</label> <input type="text" name="comment-name" value="{{ email }}"><br><br></p>
+								        <div class="form-group">
+										  <label for="comment">Comment:</label>
+										  <textarea class="form-control" width="140%" name="comment" id="comment"></textarea>
+										</div>
+								        <p><input type="hidden" id="pid" name="pid" value="{{ id }}"></p><p>
+								        <br><button type="submit" class="btn btn-primary">Post</button></p><br><br>
+								        </form>
+										<ul>
+										    {% for item in comments %}
+										        <div class="panel panel-info">
+												  <div class="panel-heading">{{ item.Author }}</div>
+												  <div class="panel-body">{{ item.Comment }}</div>
+												</div><br>
+										    {% endfor %}
+									    </ul>
+							        </div>
+							    
+						      </div>
+						      <div class="modal-footer">
+						      	<div class="row">
+						      		<div class="col-md-1" align="left">
+						      			<form method="POST" action="/like">
+						      			<input type="hidden" id="pid" name="pid" value="{{ id }}">
+						      			<button type="submit" class="btn btn-info">
+								          <span class="glyphicon glyphicon-thumbs-up"></span> {{ nlikes}} likes
+								        </button>
+								        </form>
+								    </div>
+								    <div class="col-md-5" align="left">
+								        <form method="POST" action="/dislike">
+						      			<input type="hidden" id="pid" name="pid" value="{{ id }}">
+						      			<button type="submit" class="btn btn-danger">
+								          <span class="glyphicon glyphicon-thumbs-down"></span> {{ ndislikes}} dislikes
+								        </button>
+								        </form>
+								    </div>
+								    <div class="col-md-6" align="right">
+								          	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								    </div>
+								</div>
+						      </div>
+						    </div>
+
+						  </div>
+						</div>
+</div>

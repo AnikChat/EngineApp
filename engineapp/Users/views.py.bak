@@ -1,0 +1,86 @@
+# standard library imports
+import logging
+import os
+
+# related third party imports
+import webapp2
+from webapp2_extras import jinja2
+
+
+# local application/library specific imports
+from forms import UserForm
+
+Signup = 'F:\\Project\\Company_project\\engineapp\\templates\\'
+
+
+class BaseHandler(webapp2.RequestHandler):
+    @webapp2.cached_property
+    def jinja2(self):
+        return jinja2.get_jinja2(app=self.app)
+
+    def render_template(self, filename, **template_args):
+        self.response.write(
+            self.jinja2.render_template(filename, **template_args))
+
+
+
+class Signup(BaseHandler):
+    """Handler for Signup form
+    """
+
+    def get(self):
+        """ Returns a simple HTML form for create a new user """
+        self.render_template('Signup.html')
+
+
+    def post(self):
+        try:
+            form = UserForm()
+            form.email = self.request.get('email')
+            form.password = self.request.get('password')
+            form.name = self.request.get('name')
+            mail = form.save()
+            logging.info("Horray, User Increased in database.")
+        except:
+            logging.error("Error saving User in datastore")
+        finally:
+            self.redirect('/Home')
+
+
+class LoginHandler(BaseHandler):
+    def get(self):
+        """ Returns a simple HTML form for Login Handler"""
+        params = {}
+        return self.render_template('register.html', **params)
+
+    def post(self):
+        """ Checks Wether the login is Correct Or Not"""
+        try:
+            form = UserForm()
+            form.email = self.request.get('EmailID')
+            form.email = self.request.get('Password')
+            mail, Error_Message = form.find_or_update('GET')
+            self.session['mail'] = form.email
+            logging.info("Horray, User Increased in database.")
+        except:
+            logging.error("Error saving User in datastore")
+        finally:
+            self.redirect('/Home/')
+
+
+class ForgotPassword(BaseHandler):
+    def get(self):
+        """ Returns a simple HTML form for Forgot Password Handler"""
+        params = {}
+        return self.render_template('register.html', **params)
+
+    def post(self):
+        """ Update EmailID Of User"""
+        try:
+            form = UserForm(formdata=self.request.POST)
+            mail, Error_Message = form.find_or_update('UPDATE')
+            logging.info("Email Has Been Sent to user")
+        except:
+            logging.error("Error saving User in datastore.")
+        finally:
+            self.redirect('/Home/')

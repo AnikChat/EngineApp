@@ -1,0 +1,4 @@
+cron:
+- description: Mail To User
+  url: /reports
+  schedule: every 1 hours synchronized

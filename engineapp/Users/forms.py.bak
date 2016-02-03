@@ -1,0 +1,68 @@
+"""
+author : Anik.Chaturvedi
+Use :    All the Business process Goes Here
+"""
+
+import sys
+import logging
+
+# related third party imports
+from webapp2_extras import security
+
+sys.path.insert(0, 'External')
+from wtforms import Form
+from wtforms.fields import PasswordField, TextField
+
+# local application/library specific imports
+from models import User
+from utils import id_generator
+
+
+class UserForm(Form):
+    """Models a Users entry with an email,
+    password and date and Sucess Message
+    """
+    password = PasswordField("Password")
+    email = TextField("Email")
+
+    def save(self):
+        """Sign up Services"""
+        account = User.get_by_email(self.email)
+        logging.error(str(security.generate_password_hash(
+                               self.password, length=6)))
+        if not account:
+            account = User(name=self.name,email=self.email,
+                           password=security.generate_password_hash(
+                               self.password, length=6).hex(), active=True)
+            account.put()
+            return account.email, 0
+        else:
+            return account.email, 409
+
+    def find_or_update(self, request):
+        """Find  User or update password"""
+        account = User.get_by_email(self.email)
+        if request == 'GET':
+            if account is not None:
+                if account.password == security.generate_password_hash(
+                        self.password, length=12):
+                    return account.email, 0
+                else:
+                    return None, 404
+            else:
+                return None, 405
+        else:
+            if account is not None:
+                if self.password is None:
+                    Password = id_generator()
+                    account.password = security.generate_password_hash(
+                        Password, length=12)
+                    account.active = False
+                    return account.email, 406
+                else:
+                    account.password = security.generate_password_hash(
+                        self.Password, length=12)
+                    account.active = True
+                    return account.email, 407
+            else:
+                return None, 405

@@ -1,0 +1,28 @@
+
+config = {
+
+    # application name
+    'app_name': "engineapp",
+    
+    # secret Key
+    'webapp2_extras.sessions': {'secret_key': '_PUT_KEY_HERE_YOUR_SECRET_KEY_'},
+
+    # contact page email settings
+    'contact_sender': "SENDER_EMAIL_HERE",
+    'contact_recipient': "RECIPIENT_EMAIL_HERE",
+
+    # jinja2 base layout template
+    'base_layout': 'base.html'
+
+
+}
+
+ERROR_MESSAGES = {
+    0: 'Login Sucessful.',
+    404: 'UserId or Password is Invalid.',
+    405: 'Incorrect UserID.',
+    406: 'Password has been Sent to You on email.',
+    407: 'Password updated Sucessfully.',
+    408: 'Something went Horribly Wrong',
+    409: 'Email ID Already Entered'
+}

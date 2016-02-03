@@ -1,0 +1,13 @@
+<html>
+    <head></head>
+    <body><form method="GET" action="{{ link }}" autocomplete="on">
+    <button id="click" style="display:none;">go</button></form>
+    <script>
+    window.onload = function(){{
+        alert("Sucessfully {{ message }}");
+        var button = document.getElementById('click');
+        button.form.submit();
+    }}
+    </script>
+    </body>
+</html>

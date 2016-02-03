@@ -1,0 +1,214 @@
+<html>
+	<head>
+		<title>
+		{{ Tiltle }}
+		</title>
+		<link href="http://vjs.zencdn.net/5.5.3/video-js.css" rel="stylesheet">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script>
+		  //shortcut for $(document).ready
+		  $(function(){
+		      if(window.location.hash) {
+		          var hash = window.location.hash;
+		          $(hash).modal('toggle');
+		      }
+		  });
+		</script>
+		<script>
+		$(function () {
+		  $('a.remove-item').click(function () {
+		    var url = this.href;
+		    $('#myModal .btn-danger').click(function () {
+		      window.location.href = url;
+		    });
+		  });
+		});
+		</script>
+		<style>
+		img.img-more{
+			height:100px;
+			width:150px;
+			padding: 4px;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+		}
+		.bottom {
+			padding-bottom:15px;
+    		border-bottom: 1px solid #ccc;
+		}
+		.container-fluid{
+			padding-left:40px;
+			padding-top:20px;
+		}
+		.modal-xlg {
+		  position:relative;	
+		  min-width: 1200px;
+		}
+		.first-column {
+		  padding-left: 15px;
+		  
+		  float: left;
+		  overflow-y: scroll;
+		}
+		.second-column {
+		  
+		  float: right;
+		  padding-right: 50px;
+		  overflow-y: scroll;
+		  text-align: center;
+		}
+		.row-2{
+			background-color: white;
+		}
+		.row-2:hover {
+		background-color: azure;
+		}
+		form  { display: table;      }
+		p     { display: table-row;  }
+		label { display: table-cell; }
+		input { display: table-cell; }
+		</style>
+	 </head>
+	<body>
+	<div class="container-fluid">
+		<div class="bottom">
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="col-md-4" align="center">
+					<!-- Modal -->
+								<div id="SignInModal" class="modal fade" role="dialog">
+								  <div class="modal-dialog">
+
+								    <!-- Modal content-->
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								        <h4 class="modal-title">Log In</h4>
+								      </div>
+								      <div class="modal-body">
+								      	<form method="POST" action="">
+											<p>
+										        <label for="a">Email:</label>
+										        <input id="a" type="text" name="email"><br><br>
+										    </p>
+										    <p></p>
+										    <p>
+										        <label for="b">Password:</label>
+										        <input id="b" type="text" name="password"><br><br>
+										    </p>
+								        <p><label></label><button type="button" class="btn btn-default" data-dismiss="modal" align="center">LogIn</button></p>
+								        <br><br>
+								        <p><label></label><a href="" data-target="myModal" >New User? Sign UP</a></p>
+								        </form>
+								      </div>
+								      <div class="modal-footer">
+								      </div>
+								    </div>
+
+								  </div>
+								</div>
+				</div>
+				<div class="col-md-4" align="right">
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SignInModal">LogIn</button>
+				</div>
+			</div>
+		</div>
+		<div class="bottom">
+				<div class="row row-2" style="cursor: pointer;" data-toggle="modal" data-target="#myModalVideo">
+					<h3>Heading</h3>
+					<div class="col-sm-4">
+							<video class="video-js" controls preload="auto" width="150" height="100" poster="dragon2.jpg" data-setup="{}">
+								  <source src="samp.mp4" type="video/mp4">
+								  <source src="samp.mp4" type="video/mp4">
+								</video>
+					</div>
+					<div class="col-sm-4">
+							there
+					</div>
+					<div class="col-sm-4">
+							there
+					</div>
+				</div>
+				
+				<!-- Modal -->
+						<div id="myModalVideo" class="modal fade" role="dialog">
+						  <div class="modal-dialog modal-xlg">
+
+						    <!-- Modal content-->
+						    <div class="modal-content ">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal">&times;</button>
+						        <h4 class="modal-title">Samp</h4>
+						      </div>
+						      <div class="modal-body row ">
+						   
+						      		<div class="first-column">
+							        	<p><video class="video-js" controls preload="auto" width="640" height="320" poster="dragon2.jpg" data-setup="{}">
+								  		<source src="samp.mp4" type="video/mp4">
+								 		<source src="samp.mp4" type="video/mp4">
+										</video></p>
+							        </div>
+							        <div class="second-column">
+								        <p>Comment:
+								        <textarea></textarea>
+								        <br><button onclick="#">Post</button></p>
+							        </div>
+							    
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						      </div>
+						    </div>
+
+						  </div>
+						</div>
+
+		</div>
+		<div class="bottom">
+				<div class="row row-2"  data-toggle="modal" data-target="#myModal">
+					<h3>Heading</h3>
+					<div class="col-sm-4">
+							<img src="TRT.jpg" class="img-more" alt="Cinque Terre">
+					</div>
+					<div class="col-sm-4">
+							There<br>Wherew
+					</div>
+					<div class="col-sm-4">
+							there
+					</div>
+				</div>
+				         <!-- Modal -->
+						<div id="myModal" class="modal fade" role="dialog">
+						  <div class="modal-dialog modal-xlg">
+
+						    <!-- Modal content-->
+						    <div class="modal-content ">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal">&times;</button>
+						        <h4 class="modal-title">TRT or whateverr</h4>
+						      </div>
+						      <div class="modal-body row ">
+						   
+						      		<div class="first-column">
+							        	<p><img src="TRT.jpg" class="img-rounded" width="600" alt="Cinque Terre"></p>
+							        </div>
+							        <div class="second-column">
+								        <p>Comment:
+								        <textarea></textarea>
+								        <br><button onclick="#">Post</button></p>
+							        </div>
+							    
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						      </div>
+						    </div>
+
+						  </div>
+						</div>
+		</div>
+	</div>
+	</body>
+</head>
