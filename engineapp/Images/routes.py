@@ -3,7 +3,7 @@ from webapp2_extras.routes import RedirectRoute
 
 # local application/library specific imports
 from views import PhotoUploadFormHandler, PhotoUploadHandler
-from views import ListPhotoHandler, CommentHandler, LikeHandler, DisLikeHandler
+from views import ListPhotoHandler, CommentHandler, LikeHandler, DisLikeHandler, ViewPhotoHandler
 
 _routes = [
      RedirectRoute(
@@ -25,7 +25,10 @@ _routes = [
         name='upload_photo', strict_slash=True),
     RedirectRoute(
         '/dislike', DisLikeHandler,
-        name='upload_photo', strict_slash=True)
+        name='upload_photo', strict_slash=True),
+    RedirectRoute(
+        '/view_photo/<photo_key:[^/]+>', ViewPhotoHandler,
+        name='view_photo', strict_slash=True),
 ]
 
 

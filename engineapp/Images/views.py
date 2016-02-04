@@ -9,6 +9,7 @@ from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api.images import get_serving_url
 from google.appengine.ext.webapp import template
+from google.appengine.ext.blobstore import BlobKey
 
 from config import ERROR_MESSAGES
 
@@ -53,7 +54,6 @@ class PhotoUploadFormHandler(BaseHandler):
 
     def get(self):
         if not self.session.get('mail'):
-            logging.error('In Here :::')
             self.session['Error_Message'] = ERROR_MESSAGES[2]
             self.redirect('/Home')
         upload_url = blobstore.create_upload_url('/upload_photo')
@@ -90,13 +90,23 @@ class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             self.error(500)
 
 
+class ViewPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
+
+    def get(self, photo_key):
+        logging.error("in blbosend")
+        if not blobstore.get(photo_key):
+            logging.error('going here')
+            self.error(500)
+        else:
+            self.send_blob(photo_key)
+
+
 class ListPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler,
                        BaseHandler):
 
     def get(self):
         # Get the all user pics
         pics = Image.get_all_Images()
-        logging.error('Value Of Anik Is ::' + str(self.session.get('mail')))
         params = {}
         if self.session.get('Error_Message'):
             params = {
@@ -121,37 +131,28 @@ class ListPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler,
                 if not blobstore.get(pic.blob_key):
                     logging.error('oops something went Terribly wrong.')
                 else:
-                    logging.error("befor key")
                     key = blobstore.get(pic.blob_key)
-                    logging.error("after key befor serving"+str(key))
                     blob_info = blobstore.BlobInfo.get(pic.blob_key)
-                    # This Code Fails in Production 
+                    # This Code Fails in Production
+                    url = '/view_photo/' + str(pic.blob_key)
+                    comments = Comment.get_Detail(pic.key)
+                    context = {'id': pic.key.id(), 'Name': pic.name,
+                               'url': url, 'user': pic.author,
+                               'comments': comments, 'nlikes': pic.Like,
+                               'ndislikes': pic.Dislike,
+                               'email': mail
+                               }
                     if blob_info.content_type in image_types:
-                        url = get_serving_url(key)
-                        logging.error("after serving"+str(url))
-                        comments = Comment.get_Detail(pic.key)
-                        context = {'id': pic.key.id(), 'Name': pic.name,
-                                   'url': url, 'user': pic.author,
-                                   'comments': comments, 'nlikes': pic.Like,
-                                   'ndislikes': pic.Dislike,
-                                   'email': mail
-                                   }
-                        logging.error('This is where right?')
-                        logging.error(
-                            'This is where right?' + blob_info.content_type)
-                        if blob_info.content_type in image_types:
-                            logging.error('This is where right?')
-                            page = page + \
-                                template.render(
-                                    'templates/Home_Form_Image.html', context)
-                        elif blob_info.content_type in video_types:
-                            page = page + \
-                                template.render(
-                                    'templates/Home_Form_Video.html', context)
-                        else:
-                            logging.error("Something is Missed" + str(pic.id))
+                        page = page + \
+                            template.render(
+                                'templates/Home_Form_Image.html', context)
+                    elif blob_info.content_type in video_types:
+                        page = page + \
+                            template.render(
+                                'templates/Home_Form_Video.html', context)
                     else:
-                        logging.error('We got Video Over Here:::::')
+                        logging.error("Something is Missed" + str(pic.id))
+
             page = page + template.render('templates/Home_footer.html', {})
             self.response.write(page)
 
@@ -159,7 +160,6 @@ class ListPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler,
 class CommentHandler(BaseHandler):
 
     def post(self):
-        logging.error(self.request.get('pid'))
         photo_id = int(self.request.get('pid'))
         Author = self.request.get('comment-name')
         comment = self.request.get('comment')
@@ -169,7 +169,6 @@ class CommentHandler(BaseHandler):
         if Author == '' or comment == '':
             pic_id = "/Home#" + str(photo_id)
             self.redirect(pic_id)
-            logging.error("Is it here?")
         else:
             if photo:
                 try:
@@ -179,7 +178,7 @@ class CommentHandler(BaseHandler):
                     comment.put()
                     logging.info("Horray, a comment is saved.")
                 except:
-                    logging.error("Error saving User in datastore.")
+                    logging.error("Error saving comment in datastore.")
                 finally:
                     pic_id = "/Home#" + str(photo_id)
                     render = template.render('templates/redirect.html',
@@ -197,7 +196,7 @@ class LikeHandler(BaseHandler):
                 photo.Like = photo.Like + 1
                 photo.put()
             except:
-                logging.error("Error saving User in datastore.")
+                logging.error("Error saving Like in datastore.")
             finally:
                 pic_id = "/Home#" + str(photo_id)
                 render = template.render('templates/redirect.html',
